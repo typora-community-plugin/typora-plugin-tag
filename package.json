@@ -19,7 +19,7 @@
     "@types/jquery": "3.3.1",
     "@types/lodash": "~4.14.195",
     "@types/node": "16.18.0",
-    "@types/typora": "npm:@typora-community-plugin/typora-types",
+    "@types/typora": "npm:@typora-community-plugin/typora-types@^1.0.0",
     "@types/yauzl": "2.10.0",
     "@typora-community-plugin/core": "^2.0.0-beta.2",
     "archiver": "^5.3.1",
