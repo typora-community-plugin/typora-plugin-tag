@@ -1,0 +1,10 @@
+{
+  "id": "typora-community-plugin.tag",
+  "name": "Typora Plugin Tag",
+  "description": "Support tag like `#tag`.",
+  "author": "plylrnsdy",
+  "authorUrl": "https://github.com/plylrnsdy",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "minLoaderVersion": "2.0.0-beta.2"
+}
