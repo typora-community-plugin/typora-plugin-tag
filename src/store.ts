@@ -1,35 +1,35 @@
 import * as _ from "lodash"
+import { Events } from "@typora-community-plugin/core"
 
 
-export class TagStore extends Set<string> {
+type TagEvents = {
+  'change'(): void
+}
 
-  private changeListeners: Function[] = []
+export class TagStore extends Events<TagEvents> {
 
-  constructor() {
-    super()
+  private _store: Record<string, boolean> = {}
+
+  has(value: string) {
+    return this._store[value]
   }
 
   add(value: string): this {
-    super.add(value)
-    this.changeListeners.forEach(fn => fn())
+    this._store[value] = true
+    this.emit('change')
     return this
   }
 
-  delete(value: string): boolean {
-    const res = super.delete(value)
-    this.changeListeners.forEach(fn => fn())
-    return res
+  delete(value: string) {
+    delete this._store[value]
+    this.emit('change')
   }
 
   toArray() {
-    return [...this]
+    return Object.keys(this._store)
   }
 
   map(iteratee: (value: string) => any) {
     return this.toArray().map(iteratee)
-  }
-
-  onChange(listener: Function) {
-    this.changeListeners.push(listener)
   }
 }

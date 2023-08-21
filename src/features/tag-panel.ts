@@ -1,5 +1,5 @@
 import { type App, View, html } from '@typora-community-plugin/core'
-import TagPlugin from './main'
+import TagPlugin from '../main'
 
 
 export class TagPanel extends View {
@@ -7,7 +7,7 @@ export class TagPanel extends View {
   constructor(private app: App, private plugin: TagPlugin) {
     super()
 
-    plugin.store.onChange(() => {
+    plugin.store.on('change', () => {
       this.renderTags()
     })
   }

@@ -1,7 +1,7 @@
-import { I18n, Plugin, Sidebar, WorkspaceRibbon } from '@typora-community-plugin/core'
+import { I18n, Plugin, Sidebar, WorkspaceRibbon, html } from '@typora-community-plugin/core'
 import { editor, isInputComponent } from 'typora'
 import { TagStore } from './store'
-import { TagPanel } from './tag-panel'
+import { TagPanel } from './features/tag-panel'
 
 
 export default class TagPlugin extends Plugin {
@@ -48,8 +48,6 @@ export default class TagPlugin extends Plugin {
     })
 
 
-    const iconEl = $(`<div class="typ-icon"><i class="fa fa-tags"></i></div>`).get(0)!
-
     const sidebar = this.app.workspace.getViewByType(Sidebar)!
 
     this.register(
@@ -58,7 +56,7 @@ export default class TagPlugin extends Plugin {
         id: 'tag',
         title: 'Tags',
         className: 'typ-tag-button',
-        icon: iconEl,
+        icon: html`<div class="typ-icon"><i class="fa fa-tags"></i></div>`,
         onclick: () => sidebar.switch(TagPanel),
       })
     )
