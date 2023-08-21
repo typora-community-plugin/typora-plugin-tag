@@ -6,3 +6,18 @@ i[alt="tag"] {
   color: #00965e;
   background-color: rgba(0, 150, 94, 0.05);
 }
+
+.typ-tag-item {
+  position: relative;
+  padding: .3rem .6rem;
+  font-size: .875rem;
+
+  &:hover {
+    background: rgba(var(--typ-color-gray-1), .5);
+  }
+
+  i.fa-trash-o {
+    position: absolute;
+    right: .6rem;
+  }
+}
