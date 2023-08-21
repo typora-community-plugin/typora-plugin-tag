@@ -16,7 +16,7 @@ export class TagStyleToggler extends Component {
       title: this.plugin.i18n.t.toggleTag,
       scope: 'editor',
       hotkey: 'Alt+Ctrl+T',
-      callback: this.toggleTagStyle,
+      callback: () => this.toggleTagStyle(),
     })
   }
 

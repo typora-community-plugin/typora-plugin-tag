@@ -1,5 +1,5 @@
 import { type App, View, html } from '@typora-community-plugin/core'
-import TagPlugin from '../main'
+import type TagPlugin from '../main'
 
 
 export class TagPanel extends View {
