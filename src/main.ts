@@ -1,19 +1,36 @@
-import { I18n, Plugin, Sidebar, WorkspaceRibbon, html } from '@typora-community-plugin/core'
+import { I18n, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
 import { TagStyleToggler } from './features/style-toggler'
-import { TagPanel } from './features/tag-panel'
+import { UseSuggest } from './features/use-sugguest'
+import { TagSettingTab } from './setting-tab'
 
 
-export default class TagPlugin extends Plugin {
+interface TagSettings {
+  useSuggest: boolean
+}
+
+const DEFAULT_SETTINGS: TagSettings = {
+  useSuggest: false,
+}
+
+export default class TagPlugin extends Plugin<TagSettings> {
 
   i18n = new I18n({
     resources: {
       'en': {
         toggleTag: 'Toggle Focused/Selected Text Tag Style',
+        useSuggest: {
+          name: 'Use suggestion',
+          desc: 'Input text prefix `#` to trigger tag suggestions.'
+        },
       },
       'zh-cn': {
         toggleTag: '切换标签样式',
+        useSuggest: {
+          name: '输入建议',
+          desc: '输入触发字符 `#` 触发标签建议。'
+        },
       },
     }
   })
@@ -22,24 +39,18 @@ export default class TagPlugin extends Plugin {
 
   onload() {
 
+    this.registerSettings(
+      new PluginSettings(this.app, this.manifest, {
+        version: 1,
+      }))
+
+    this.settings.setDefault(DEFAULT_SETTINGS)
+
+
     this.addChild(new TagRenderer(this))
     this.addChild(new TagStyleToggler(this))
+    this.addChild(new UseSuggest(this.app, this))
 
-
-    const sidebar = this.app.workspace.getViewByType(Sidebar)!
-
-    this.register(
-      this.app.workspace.getViewByType(WorkspaceRibbon)!.addButton({
-        group: 'top',
-        id: 'tag',
-        title: 'Tags',
-        className: 'typ-tag-button',
-        icon: html`<div class="typ-icon"><i class="fa fa-tags"></i></div>`,
-        onclick: () => sidebar.switch(TagPanel),
-      })
-    )
-
-    this.register(
-      sidebar.addChild(new TagPanel(this.app, this)))
+    this.registerSettingTab(new TagSettingTab(this))
   }
 }
