@@ -1,8 +1,8 @@
 import { I18n, Plugin, Sidebar, WorkspaceRibbon, html } from '@typora-community-plugin/core'
-import { editor, isInputComponent } from 'typora'
 import { TagStore } from './store'
-import { TagPanel } from './features/tag-panel'
 import { TagRenderer } from './features/tag-renderer'
+import { TagStyleToggler } from './features/style-toggler'
+import { TagPanel } from './features/tag-panel'
 
 
 export default class TagPlugin extends Plugin {
@@ -23,14 +23,7 @@ export default class TagPlugin extends Plugin {
   onload() {
 
     this.addChild(new TagRenderer(this))
-
-    this.registerCommand({
-      id: 'toggle-style',
-      title: this.i18n.t.toggleTag,
-      scope: 'editor',
-      hotkey: 'Alt+Ctrl+T',
-      callback: this.toggleTagStyle,
-    })
+    this.addChild(new TagStyleToggler(this))
 
 
     const sidebar = this.app.workspace.getViewByType(Sidebar)!
@@ -48,33 +41,5 @@ export default class TagPlugin extends Plugin {
 
     this.register(
       sidebar.addChild(new TagPanel(this.app, this)))
-  }
-
-  private toggleTagStyle() {
-    if (isInputComponent(document.activeElement)) return
-
-    const selected = document.getSelection()?.anchorNode?.parentElement?.parentElement ?? null
-    if (
-      this.isTagEl(selected) ||
-      this.isTagEl(selected!.children[1])
-    ) {
-      editor.selection.selectPhrase()
-      const selectedText = document.getSelection()?.toString() ?? ''
-      const [, text] = selectedText.match(/<i alt="tag">#([^<]+)<\/i>/) ?? []
-      editor.UserOp.pasteHandler(editor, text, false)
-    }
-    else {
-      const range = editor.selection.getRangy()
-      if (range.collapsed) editor.selection.selectWord()
-      const selectedText = document.getSelection()?.toString() ?? ''
-      const tag = (selectedText.startsWith('#') ? '' : '#') + selectedText
-      const html = `<i alt="tag">${tag}</i>`
-      this.store.add(tag)
-      editor.UserOp.pasteHandler(editor, html, true)
-    }
-  }
-
-  private isTagEl(el: Element | null) {
-    return el && el.tagName === 'I' && el.getAttribute('alt') === 'tag'
   }
 }
