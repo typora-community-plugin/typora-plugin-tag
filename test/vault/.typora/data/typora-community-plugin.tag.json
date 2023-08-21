@@ -1,6 +1,12 @@
 {
   "version": 1,
   "settings": {
-    "useSuggest": false
+    "useSuggest": true,
+    "tags": [
+      "#editor",
+      "#markdown",
+      "#tag",
+      "#tag/subtag"
+    ]
   }
 }

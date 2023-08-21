@@ -20,9 +20,16 @@ export class TagStore extends Events<TagEvents> {
     return this
   }
 
+  bulkAdd(value: string[]) {
+    value.forEach(tag => this._store[tag] = true)
+    this.emit('change')
+    return this
+  }
+
   delete(value: string) {
     delete this._store[value]
     this.emit('change')
+    return this
   }
 
   toArray() {

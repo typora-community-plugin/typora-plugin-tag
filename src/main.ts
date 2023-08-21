@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { I18n, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
@@ -8,10 +9,12 @@ import { TagSettingTab } from './setting-tab'
 
 interface TagSettings {
   useSuggest: boolean
+  tags: string[]
 }
 
 const DEFAULT_SETTINGS: TagSettings = {
   useSuggest: false,
+  tags: [],
 }
 
 export default class TagPlugin extends Plugin<TagSettings> {
@@ -45,6 +48,12 @@ export default class TagPlugin extends Plugin<TagSettings> {
       }))
 
     this.settings.setDefault(DEFAULT_SETTINGS)
+
+    this.store.bulkAdd(this.settings.get('tags'))
+
+    this.register(
+      this.store.on('change', _.debounce(() =>
+        this.settings.set('tags', this.store.toArray()), 1e3)))
 
 
     this.addChild(new TagRenderer(this))
