@@ -2,6 +2,7 @@ import { I18n, Plugin, Sidebar, WorkspaceRibbon, html } from '@typora-community-
 import { editor, isInputComponent } from 'typora'
 import { TagStore } from './store'
 import { TagPanel } from './features/tag-panel'
+import { TagRenderer } from './features/tag-renderer'
 
 
 export default class TagPlugin extends Plugin {
@@ -21,23 +22,7 @@ export default class TagPlugin extends Plugin {
 
   onload() {
 
-    this.registerMarkdownPreProcessor({
-      when: 'preload',
-      type: 'mdtext',
-      process: md =>
-        md.replace(/(^|\s)(#[^\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,.:;<=>?@^`{|}~\[\]\\\s]+)/g, (_, $1, tag) => {
-          this.store.add(tag)
-          return `${$1}<i alt="tag">${tag}</i>`
-        })
-    })
-
-    this.registerMarkdownPreProcessor({
-      when: 'presave',
-      type: 'mdtext',
-      process: md =>
-        md.replace(/<i alt="tag">(#[^\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,.:;<=>?@^`{|}~\[\]\\\s]+)<\/i>/g, '$1')
-    })
-
+    this.addChild(new TagRenderer(this))
 
     this.registerCommand({
       id: 'toggle-style',
