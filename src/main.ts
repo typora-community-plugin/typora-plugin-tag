@@ -23,6 +23,7 @@ export default class TagPlugin extends Plugin<TagSettings> {
     resources: {
       'en': {
         toggleTag: 'Toggle Focused/Selected Text Tag Style',
+        ribbonTags: 'Tags',
         useSuggest: {
           name: 'Use suggestion',
           desc: 'Input text prefix `#` to trigger tag suggestions.'
@@ -30,6 +31,7 @@ export default class TagPlugin extends Plugin<TagSettings> {
       },
       'zh-cn': {
         toggleTag: '切换标签样式',
+        ribbonTags: '标签',
         useSuggest: {
           name: '输入建议',
           desc: '输入触发字符 `#` 触发标签建议。'

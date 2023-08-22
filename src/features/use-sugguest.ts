@@ -36,9 +36,9 @@ export class UseSuggest extends Component {
       this.app.workspace.getViewByType(WorkspaceRibbon)!.addButton({
         group: 'top',
         id: 'tag',
-        title: 'Tags',
+        title: plugin.i18n.t.ribbonTags,
         className: 'typ-tag-button',
-        icon: html`<div class="typ-icon"><i class="fa fa-tags"></i></div>`,
+        icon: html`<i class="fa fa-tags"></i>`,
         onclick: () => sidebar.switch(TagPanel),
       })
     )

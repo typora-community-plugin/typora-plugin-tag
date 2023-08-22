@@ -5,9 +5,9 @@ specifiers:
   '@types/lodash': ~4.14.197
   '@types/node': 16.18.0
   '@types/typora': npm:@typora-community-plugin/typora-types@^1.0.3
-  '@typora-community-plugin/core': ^2.0.0-beta.21
+  '@typora-community-plugin/core': 2.0.0-beta.23
   archiver: ^5.3.2
-  esbuild: ^0.19.1
+  esbuild: ^0.19.2
   esbuild-plugin-typora: npm:@typora-community-plugin/esbuild-plugin-typora@^1.0.5
   esbuild-sass-plugin: ^2.12.0
 
@@ -16,7 +16,7 @@ devDependencies:
   '@types/lodash': 4.14.197
   '@types/node': 16.18.0
   '@types/typora': /@typora-community-plugin/typora-types/1.0.3
-  '@typora-community-plugin/core': 2.0.0-beta.21
+  '@typora-community-plugin/core': 2.0.0-beta.23
   archiver: 5.3.2
   esbuild: 0.19.2
   esbuild-plugin-typora: /@typora-community-plugin/esbuild-plugin-typora/1.0.5
@@ -240,8 +240,8 @@ packages:
     resolution: {integrity: sha512-LqYqYzYvnbCaQfLAwRt0zboqnsViwhZm+vjaMSqcfN36vulAg7Pt0T83q4WZO2YOBw3XdyHi8cQ88H22zmULOA==}
     dev: true
 
-  /@typora-community-plugin/core/2.0.0-beta.21:
-    resolution: {integrity: sha512-Yc9RlkIti590RDz6royKms4yTVRRBTGP/2C1i7WxRNq94bScBc82efAeWQcK6UJzFuWbh9faQmtkmz/leI1L3Q==}
+  /@typora-community-plugin/core/2.0.0-beta.23:
+    resolution: {integrity: sha512-vmy1LjN1p/Gho4RJkORb20TG3WWrMczNIeFSvu7WQYA0MarTSu1NKLT07hAKdOllCFFDUG4/IqPffU8pSjCNPA==}
     dependencies:
       '@plylrnsdy/decorate.js': 1.0.1
     dev: true
@@ -359,7 +359,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /compress-commons/4.1.1:
@@ -455,8 +455,8 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
-  /fsevents/2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+  /fsevents/2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
