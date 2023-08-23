@@ -10,7 +10,7 @@ For adding style to tag, this plugin will surround it with HTML tag, but the HTM
 
 ## Preview
 
-![](https://fastly.jsdelivr.net/gh/typora-community-plugin/typora-plugin-tag@main/docs/assets/base.jpg)
+![](./docs/assets/base.jpg)
 
 ## Usage
 

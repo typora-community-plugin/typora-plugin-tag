@@ -35,8 +35,4 @@ export class TagStore extends Events<TagEvents> {
   toArray() {
     return Object.keys(this._store)
   }
-
-  map(iteratee: (value: string) => any) {
-    return this.toArray().map(iteratee)
-  }
 }

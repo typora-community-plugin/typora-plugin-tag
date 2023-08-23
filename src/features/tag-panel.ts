@@ -35,7 +35,10 @@ export class TagPanel extends View {
   private renderTags() {
     this.containerEl.innerHTML = ''
     this.containerEl.append(
-      ...this.plugin.store.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-trash-o"></i></div>`)
+      ...this.plugin.store
+        .toArray()
+        .sort()
+        .map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-trash-o"></i></div>`)
     )
   }
 }
