@@ -5,22 +5,22 @@ specifiers:
   '@types/lodash': ~4.14.197
   '@types/node': 16.18.0
   '@types/typora': npm:@typora-community-plugin/typora-types@^1.0.3
-  '@typora-community-plugin/core': 2.0.0-beta.23
+  '@typora-community-plugin/core': 2.0.0-beta.25
   archiver: ^5.3.2
   esbuild: ^0.19.2
   esbuild-plugin-typora: npm:@typora-community-plugin/esbuild-plugin-typora@^1.0.5
-  esbuild-sass-plugin: ^2.12.0
+  esbuild-sass-plugin: ^2.13.0
 
 devDependencies:
   '@types/jquery': 3.3.1
   '@types/lodash': 4.14.197
   '@types/node': 16.18.0
   '@types/typora': /@typora-community-plugin/typora-types/1.0.3
-  '@typora-community-plugin/core': 2.0.0-beta.23
+  '@typora-community-plugin/core': 2.0.0-beta.25
   archiver: 5.3.2
   esbuild: 0.19.2
   esbuild-plugin-typora: /@typora-community-plugin/esbuild-plugin-typora/1.0.5
-  esbuild-sass-plugin: 2.12.0_esbuild@0.19.2
+  esbuild-sass-plugin: 2.13.0_esbuild@0.19.2
 
 packages:
 
@@ -225,7 +225,7 @@ packages:
   /@plylrnsdy/decorate.js/1.0.1:
     resolution: {integrity: sha512-bXwea+WJ3GOJDnXnzmhK1fUJnSOBiN/mjaPNryY+Shy0hPS1qr3cngsWOGEOgCddBFzef5cELObC6HDlIQ8Uxg==}
     dependencies:
-      typescript: 5.1.6
+      typescript: 5.2.2
     dev: true
 
   /@types/jquery/3.3.1:
@@ -240,8 +240,8 @@ packages:
     resolution: {integrity: sha512-LqYqYzYvnbCaQfLAwRt0zboqnsViwhZm+vjaMSqcfN36vulAg7Pt0T83q4WZO2YOBw3XdyHi8cQ88H22zmULOA==}
     dev: true
 
-  /@typora-community-plugin/core/2.0.0-beta.23:
-    resolution: {integrity: sha512-vmy1LjN1p/Gho4RJkORb20TG3WWrMczNIeFSvu7WQYA0MarTSu1NKLT07hAKdOllCFFDUG4/IqPffU8pSjCNPA==}
+  /@typora-community-plugin/core/2.0.0-beta.25:
+    resolution: {integrity: sha512-WFVAmTpWhdHXm81LomEiMPIKJGcM+Dv/IBcItfyXN9yxbDkFLwLC9YXsOzidzkrxsl8TW5vMT5nmShrg7Xc1aA==}
     dependencies:
       '@plylrnsdy/decorate.js': 1.0.1
     dev: true
@@ -400,8 +400,8 @@ packages:
       once: 1.4.0
     dev: true
 
-  /esbuild-sass-plugin/2.12.0_esbuild@0.19.2:
-    resolution: {integrity: sha512-+k/5WM/Yf/Ur7ahn6XXxEPwa/lmuacLO7vrCIAJuvQapX1CiIHtlX/nc2eiMoJ6P6RvqZhKpQvIiwgYJonzHtw==}
+  /esbuild-sass-plugin/2.13.0_esbuild@0.19.2:
+    resolution: {integrity: sha512-tpuoCPjcigaG+nKTEmDLBcmt81LADhwa5nGYA6memd56bhf27puRFlbQThvPWjypk51dsfSc30I18s4OdsmDag==}
     peerDependencies:
       esbuild: ^0.19.1
     dependencies:
@@ -500,8 +500,8 @@ packages:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: true
 
-  /immutable/4.3.2:
-    resolution: {integrity: sha512-oGXzbEDem9OOpDWZu88jGiYCvIsLHMvGw+8OXlpsvTFvIQplQbjg1B1cvKg8f7Hoch6+NGjpPsH1Fr+Mc2D1aA==}
+  /immutable/4.3.4:
+    resolution: {integrity: sha512-fsXeu4J4i6WNWSikpI88v/PcVflZz+6kMhUfIwc5SY+poQRPnaf5V7qds6SUyUN3cVxEzuCab7QIoLOQ+DQ1wA==}
     dev: true
 
   /inflight/1.0.6:
@@ -675,7 +675,7 @@ packages:
     hasBin: true
     dependencies:
       chokidar: 3.5.3
-      immutable: 4.3.2
+      immutable: 4.3.4
       source-map-js: 1.0.2
     dev: true
 
@@ -719,8 +719,8 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /typescript/5.1.6:
-    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
+  /typescript/5.2.2:
+    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

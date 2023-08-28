@@ -1,5 +1,5 @@
 import * as _ from "lodash"
-import { type App, Component, EditorSuggest, Sidebar, WorkspaceRibbon, html } from "@typora-community-plugin/core"
+import { type App, Component, TextSuggest, Sidebar, WorkspaceRibbon, html } from "@typora-community-plugin/core"
 import type TagPlugin from "../main"
 import { TagPanel } from "./tag-panel"
 
@@ -25,9 +25,13 @@ export class UseSuggest extends Component {
   onload() {
     const { app, plugin } = this
 
+    const suggest = new TagSuggest(plugin)
+
     this.register(
-      app.workspace.activeEditor.suggestion.register(
-        new TagSuggest(plugin)))
+      app.workspace.activeEditor.suggestion.register(suggest))
+
+    this.register(
+      plugin.store.on('change', () => suggest.loadSuggestions()))
 
 
     const sidebar = this.app.workspace.getViewByType(Sidebar)!
@@ -48,18 +52,22 @@ export class UseSuggest extends Component {
   }
 }
 
-class TagSuggest extends EditorSuggest<string> {
+class TagSuggest extends TextSuggest {
 
   triggerText = '#'
 
-  suggestionKeys: string[] = []
+  suggestions: string[] = []
 
-  constructor(plugin: TagPlugin) {
+  constructor(private plugin: TagPlugin) {
     super()
 
-    plugin.register(
-      plugin.store.on('change', () =>
-        this.suggestionKeys = plugin.store.toArray()))
+    this.loadSuggestions()
+  }
+
+  loadSuggestions = _.debounce(this._loadSuggestions, 1e3)
+
+  private _loadSuggestions() {
+    this.suggestions = this.plugin.store.toArray()
   }
 
   findQuery(text: string) {
@@ -71,17 +79,7 @@ class TagSuggest extends EditorSuggest<string> {
   }
 
   getSuggestions(query: string) {
-    if (!query) return this.suggestionKeys
-
-    query = query.toLowerCase()
-    const cache: Record<string, number> = {}
-    return this.suggestionKeys
-      .filter(n => {
-        cache[n] = n.toLowerCase().indexOf(query)
-        return cache[n] !== -1
-      })
-      .sort((a, b) => cache[a] - cache[b] || a.length - b.length)
-      .slice(0, 50)
+    return super.getSuggestions(query).slice(0, 50)
   }
 
   beforeApply(suggest: string) {
