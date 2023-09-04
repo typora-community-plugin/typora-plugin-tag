@@ -1,15 +1,18 @@
-import { type App, View, html } from '@typora-community-plugin/core'
+import * as _ from 'lodash'
+import { View, html } from '@typora-community-plugin/core'
 import type TagPlugin from '../main'
+import type { UseSuggest } from './use-sugguest'
 
 
 export class TagPanel extends View {
 
-  constructor(private app: App, private plugin: TagPlugin) {
+  constructor(private plugin: TagPlugin, useSuggest: UseSuggest) {
     super()
 
-    plugin.store.on('change', () => {
-      this.renderTags()
-    })
+    useSuggest.register(
+      plugin.store.on('change', _.debounce(() => {
+        this.renderTags()
+      }, 500)))
   }
 
   onload() {

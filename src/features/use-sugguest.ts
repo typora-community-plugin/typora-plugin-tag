@@ -48,7 +48,7 @@ export class UseSuggest extends Component {
     )
 
     this.register(
-      sidebar.addChild(new TagPanel(this.app, plugin)))
+      sidebar.addChild(new TagPanel(plugin, this)))
   }
 }
 
