@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import { Events } from "@typora-community-plugin/core"
 
 

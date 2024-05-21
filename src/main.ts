@@ -1,5 +1,5 @@
-import * as _ from 'lodash'
-import { I18n, Plugin, PluginSettings } from '@typora-community-plugin/core'
+import './style.scss'
+import { debounce, I18n, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
 import { TagStyleToggler } from './features/style-toggler'
@@ -54,7 +54,7 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.store.bulkAdd(this.settings.get('tags'))
 
     this.register(
-      this.store.on('change', _.debounce(() =>
+      this.store.on('change', debounce(() =>
         this.settings.set('tags', this.store.toArray()), 1e3)))
 
 

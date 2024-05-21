@@ -1,5 +1,4 @@
-import * as _ from 'lodash'
-import { View, html } from '@typora-community-plugin/core'
+import { debounce, View, html } from '@typora-community-plugin/core'
 import type TagPlugin from '../main'
 import type { UseSuggest } from './use-sugguest'
 
@@ -10,7 +9,7 @@ export class TagPanel extends View {
     super()
 
     useSuggest.register(
-      plugin.store.on('change', _.debounce(() => {
+      plugin.store.on('change', debounce(() => {
         this.renderTags()
       }, 500)))
   }
