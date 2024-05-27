@@ -12,9 +12,7 @@ export class TagPanel extends View {
     super()
 
     useSuggest.register(
-      plugin.store.on('change', debounce(() => {
-        this.renderQueriedTags()
-      }, 500)))
+      plugin.store.on('change', this.debouncedRenderQueriedTags))
   }
 
   onload() {
@@ -22,9 +20,7 @@ export class TagPanel extends View {
       .append(
 
         $('<div class="ty-sidebar-search-panel"></div>')
-          .on('input', debounce((event: JQueryEventConstructor) => {
-            this.renderQueriedTags()
-          }, 500))
+          .on('input', this.debouncedRenderQueriedTags)
           .append(this.inputEl =
             $('<input placeholder="Search">')
               .get(0) as any
@@ -48,21 +44,17 @@ export class TagPanel extends View {
   }
 
   show() {
-    this.renderAllTags()
+    this.renderQueriedTags()
     super.show()
-  }
-
-  renderAllTags() {
-    const all = this.plugin.store
-      .toArray()
-      .sort()
-    this.renderTags(all)
   }
 
   renderQueriedTags() {
     const query = this.inputEl.value.trim()
     if (query === '') {
-      this.renderAllTags()
+      const all = this.plugin.store
+        .toArray()
+        .sort()
+      this.renderTags(all)
     }
     else {
       const tags = this.plugin.store
@@ -72,6 +64,9 @@ export class TagPanel extends View {
       this.renderTags(tags)
     }
   }
+
+  debouncedRenderQueriedTags =
+    debounce(() => this.renderQueriedTags(), 500)
 
   private renderTags(tags: string[]) {
     this.resultEl.innerHTML = ''
