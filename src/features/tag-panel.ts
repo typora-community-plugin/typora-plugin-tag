@@ -5,24 +5,42 @@ import type { UseSuggest } from './use-sugguest'
 
 export class TagPanel extends View {
 
+  inputEl: HTMLInputElement
+  resultEl: HTMLElement
+
   constructor(private plugin: TagPlugin, useSuggest: UseSuggest) {
     super()
 
     useSuggest.register(
       plugin.store.on('change', debounce(() => {
-        this.renderTags()
+        this.renderQueriedTags()
       }, 500)))
   }
 
   onload() {
-    this.containerEl = $(`<div id="typ-tag-panel" style="display: none;"></div>`).get(0)!
+    this.containerEl = $(`<div id="typ-tag-panel" style="display: none;"></div>`)
+      .append(
 
-    this.containerEl.onclick = event => {
-      const el = event.target as HTMLElement
-      if (!el.closest('i')) return
-      const item = el.closest('.typ-tag-item') as HTMLElement
-      this.plugin.store.delete(item.innerText)
-    }
+        $('<div class="ty-sidebar-search-panel"></div>')
+          .on('input', debounce((event: JQueryEventConstructor) => {
+            this.renderQueriedTags()
+          }, 500))
+          .append(this.inputEl =
+            $('<input placeholder="Search">')
+              .get(0) as any
+          ),
+
+        this.resultEl =
+        $('<div class="typ-tag-results">')
+          .on('click', event => {
+            const el = event.target as HTMLElement
+            if (!el.closest('i')) return
+            const item = el.closest('.typ-tag-item') as HTMLElement
+            this.plugin.store.delete(item.innerText)
+          })
+          .get(0)
+      )
+      .get(0)
   }
 
   onunload() {
@@ -30,17 +48,35 @@ export class TagPanel extends View {
   }
 
   show() {
-    this.renderTags()
+    this.renderAllTags()
     super.show()
   }
 
-  private renderTags() {
-    this.containerEl.innerHTML = ''
-    this.containerEl.append(
-      ...this.plugin.store
+  renderAllTags() {
+    const all = this.plugin.store
+      .toArray()
+      .sort()
+    this.renderTags(all)
+  }
+
+  renderQueriedTags() {
+    const query = this.inputEl.value.trim()
+    if (query === '') {
+      this.renderAllTags()
+    }
+    else {
+      const tags = this.plugin.store
         .toArray()
+        .filter(t => t.includes(query))
         .sort()
-        .map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-trash-o"></i></div>`)
+      this.renderTags(tags)
+    }
+  }
+
+  private renderTags(tags: string[]) {
+    this.resultEl.innerHTML = ''
+    this.resultEl.append(
+      ...tags.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-trash-o"></i></div>`)
     )
   }
 }
