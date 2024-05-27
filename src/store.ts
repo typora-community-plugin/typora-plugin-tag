@@ -2,7 +2,7 @@ import { Events } from "@typora-community-plugin/core"
 
 
 type TagEvents = {
-  'change'(): void
+  'tag:change'(): void
 }
 
 export class TagStore extends Events<TagEvents> {
@@ -15,19 +15,19 @@ export class TagStore extends Events<TagEvents> {
 
   add(value: string): this {
     this._store[value] = true
-    this.emit('change')
+    this.emit('tag:change')
     return this
   }
 
   bulkAdd(value: string[]) {
     value.forEach(tag => this._store[tag] = true)
-    this.emit('change')
+    this.emit('tag:change')
     return this
   }
 
   delete(value: string) {
     delete this._store[value]
-    this.emit('change')
+    this.emit('tag:change')
     return this
   }
 

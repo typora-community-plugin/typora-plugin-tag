@@ -12,7 +12,7 @@ export class TagPanel extends View {
     super()
 
     useSuggest.register(
-      plugin.store.on('change', this.debouncedRenderQueriedTags))
+      plugin.store.on('tag:change', this.debouncedRenderQueriedTags))
   }
 
   onload() {

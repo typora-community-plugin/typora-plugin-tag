@@ -54,7 +54,7 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.store.bulkAdd(this.settings.get('tags'))
 
     this.register(
-      this.store.on('change', debounce(() =>
+      this.store.on('tag:change', debounce(() =>
         this.settings.set('tags', this.store.toArray()), 1e3)))
 
 

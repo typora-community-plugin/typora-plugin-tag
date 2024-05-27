@@ -30,7 +30,7 @@ export class UseSuggest extends Component {
       app.workspace.activeEditor.suggestion.register(suggest))
 
     this.register(
-      plugin.store.on('change', () => suggest.loadSuggestions()))
+      plugin.store.on('tag:change', () => suggest.loadSuggestions()))
 
 
     const sidebar = this.app.workspace.getViewByType(Sidebar)!
