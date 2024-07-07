@@ -1,4 +1,4 @@
-import { debounce, View, html } from '@typora-community-plugin/core'
+import { debounce, View, html, app } from '@typora-community-plugin/core'
 import type TagPlugin from '../main'
 import type { UseSuggest } from './use-sugguest'
 
@@ -20,9 +20,9 @@ export class TagPanel extends View {
       .append(
 
         $('<div class="ty-sidebar-search-panel"></div>')
-          .on('input', this.debouncedRenderQueriedTags)
           .append(this.inputEl =
             $('<input placeholder="Search">')
+              .on('input', this.debouncedRenderQueriedTags)
               .get(0) as any
           ),
 
@@ -32,7 +32,14 @@ export class TagPanel extends View {
             const el = event.target as HTMLElement
             if (!el.closest('i')) return
             const item = el.closest('.typ-tag-item') as HTMLElement
-            this.plugin.store.delete(item.innerText)
+            const tag = item.innerText
+            if (el.classList.contains('fa-search')) {
+              app.features.globalSearch.openGlobalSearch(tag)
+            }
+            else {
+              this.plugin.store.delete(tag)
+              this.debouncedRenderQueriedTags()
+            }
           })
           .get(0)
       )
@@ -71,7 +78,7 @@ export class TagPanel extends View {
   private renderTags(tags: string[]) {
     this.resultEl.innerHTML = ''
     this.resultEl.append(
-      ...tags.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-trash-o"></i></div>`)
+      ...tags.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-search"></i><i class="fa fa-trash-o"></i></div>`)
     )
   }
 }

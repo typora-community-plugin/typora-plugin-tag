@@ -7,6 +7,10 @@ i[alt="tag"] {
   background-color: rgba(0, 150, 94, 0.05);
 }
 
+#typ-tag-panel input {
+  width: 100%;
+}
+
 .typ-tag-item {
   position: relative;
   padding: .3rem .6rem;
@@ -16,8 +20,20 @@ i[alt="tag"] {
     background: rgba(var(--typ-color-gray-1), .5);
   }
 
-  i.fa-trash-o {
+  i.fa {
+    display: none;
     position: absolute;
-    right: .6rem;
+
+    &.fa-search {
+      right: 2rem;
+    }
+
+    &.fa-trash-o {
+      right: .6rem;
+    }
+  }
+
+  &:hover i.fa {
+    display: inline;
   }
 }
