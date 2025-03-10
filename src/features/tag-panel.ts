@@ -1,9 +1,9 @@
-import { debounce, View, html, app } from '@typora-community-plugin/core'
+import { debounce, SidebarPanel, html, app } from '@typora-community-plugin/core'
 import type TagPlugin from '../main'
 import type { UseSuggest } from './use-sugguest'
 
 
-export class TagPanel extends View {
+export class TagPanel extends SidebarPanel {
 
   inputEl: HTMLInputElement
   resultEl: HTMLElement
@@ -11,12 +11,18 @@ export class TagPanel extends View {
   constructor(private plugin: TagPlugin, useSuggest: UseSuggest) {
     super()
 
+    this.addRibbonButton({
+      group: 'top',
+      id: 'tag',
+      title: plugin.i18n.t.ribbonTags,
+      className: 'typ-tag-button',
+      icon: html`<i class="fa fa-tags"></i>`,
+    })
+
     useSuggest.register(
       plugin.store.on('tag:change', this.debouncedRenderQueriedTags))
-  }
 
-  onload() {
-    this.containerEl = $(`<div id="typ-tag-panel" style="display: none;"></div>`)
+    this.containerEl = $(`<div id="typ-tag-panel"></div>`)
       .append(
 
         $('<div class="ty-sidebar-search-panel"></div>')
@@ -46,13 +52,8 @@ export class TagPanel extends View {
       .get(0)
   }
 
-  onunload() {
-    this.containerEl.remove()
-  }
-
-  show() {
+  onshow() {
     this.renderQueriedTags()
-    super.show()
   }
 
   renderQueriedTags() {

@@ -1,4 +1,4 @@
-import { type App, Component, debounce, TextSuggest, Sidebar, WorkspaceRibbon, html } from "@typora-community-plugin/core"
+import { type App, Component, debounce, TextSuggest } from "@typora-community-plugin/core"
 import type TagPlugin from "../main"
 import { TagPanel } from "./tag-panel"
 
@@ -32,22 +32,8 @@ export class UseSuggest extends Component {
     this.register(
       plugin.store.on('tag:change', () => suggest.loadSuggestions()))
 
-
-    const sidebar = this.app.workspace.getViewByType(Sidebar)!
-
     this.register(
-      this.app.workspace.getViewByType(WorkspaceRibbon)!.addButton({
-        group: 'top',
-        id: 'tag',
-        title: plugin.i18n.t.ribbonTags,
-        className: 'typ-tag-button',
-        icon: html`<i class="fa fa-tags"></i>`,
-        onclick: () => sidebar.switch(TagPanel),
-      })
-    )
-
-    this.register(
-      sidebar.addChild(new TagPanel(plugin, this)))
+      this.app.workspace.sidebar.addChild(new TagPanel(plugin, this)))
   }
 }
 
