@@ -57,11 +57,25 @@ export default class TagPlugin extends Plugin<TagSettings> {
       this.store.on('tag:change', debounce(() =>
         this.settings.set('tags', this.store.toArray()), 1e3)))
 
+    this.register(
+      this.app.metadata.on('index:done', () => {
+        Object.keys(this.app.metadata.cache).forEach(key =>
+          this._addFrontMatterTagsToStore(key))
+      }))
+    this.register(
+      this.app.metadata.on('index:update', (filePath) =>
+        this._addFrontMatterTagsToStore(filePath)))
 
     this.addChild(new TagRenderer(this))
     this.addChild(new TagStyleToggler(this))
     this.addChild(new UseSuggest(this.app, this))
 
     this.registerSettingTab(new TagSettingTab(this))
+  }
+
+  private _addFrontMatterTagsToStore(filePath: string) {
+    const { cache } = this.app.metadata
+    let tags = cache[filePath]?.metadata?.frontmatter?.tags as string | string[]
+    if (Array.isArray(tags)) this.store.bulkAdd(tags.map(t => '#' + t))
   }
 }

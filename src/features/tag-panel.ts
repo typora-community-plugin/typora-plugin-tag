@@ -39,9 +39,11 @@ export class TagPanel extends SidebarPanel {
             if (!el.closest('i')) return
             const item = el.closest('.typ-tag-item') as HTMLElement
             const tag = item.innerText
+            // handle: search tag
             if (el.classList.contains('fa-search')) {
-              app.features.globalSearch.openGlobalSearch(tag)
+              this._searchTags(tag)
             }
+            // handle: delete tag
             else {
               this.plugin.store.delete(tag)
               this.debouncedRenderQueriedTags()
@@ -62,24 +64,41 @@ export class TagPanel extends SidebarPanel {
       const all = this.plugin.store
         .toArray()
         .sort()
-      this.renderTags(all)
+      this._renderTags(all)
     }
     else {
       const tags = this.plugin.store
         .toArray()
         .filter(t => t.includes(query))
         .sort()
-      this.renderTags(tags)
+      this._renderTags(tags)
     }
   }
 
   debouncedRenderQueriedTags =
     debounce(() => this.renderQueriedTags(), 500)
 
-  private renderTags(tags: string[]) {
+  private _renderTags(tags: string[]) {
     this.resultEl.innerHTML = ''
     this.resultEl.append(
       ...tags.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-search"></i><i class="fa fa-trash-o"></i></div>`)
     )
+  }
+
+  private _searchTags(tag: string) {
+    const rawTag = tag.slice(1)
+
+    const pattern = [
+      // 1) Single-line Frontmatter: `tags: [apple, orange]`
+      `^tags:.*(?:\\b|[\\s,\\[])${rawTag}(?:\\b|[\\s,\\]]).*$`,
+
+      // 2) Multi-line Frontmatter : `tags:\n- apple`
+      `^\\s*-\\s*${rawTag}\\s*$`,
+
+      // 3) Inline tag             : `#apple`
+      `(?:^|\\s)#${rawTag}(?:[\\s.,!?;:）)】"']|$)`
+    ].join('|')
+
+    app.features.globalSearch.openGlobalSearch(pattern)
   }
 }

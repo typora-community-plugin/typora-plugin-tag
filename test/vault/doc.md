@@ -1,5 +1,5 @@
 ---
-tags: [frontmatter]
+tags: [frontmatter, markdown]
 note: tag1
 notes:
 - tag2
