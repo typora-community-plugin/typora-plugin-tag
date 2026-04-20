@@ -30,6 +30,9 @@
         "visible": true,
         "order": 3
       }
+    },
+    "internalPlugin.enabledPlugins": {
+      "internal.metadata": true
     }
   }
 }

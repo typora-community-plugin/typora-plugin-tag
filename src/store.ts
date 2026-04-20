@@ -9,6 +9,10 @@ export class TagStore extends Events<TagEvents> {
 
   private _store: Record<string, boolean> = {}
 
+  constructor() {
+    super('TagStore')
+  }
+
   has(value: string) {
     return this._store[value]
   }
