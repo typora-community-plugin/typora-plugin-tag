@@ -41,7 +41,7 @@ export class TagPanel extends SidebarPanel {
             const tag = item.innerText
             // handle: search tag
             if (el.classList.contains('fa-search')) {
-              this._searchTags(tag)
+              app.features.globalSearch.openAdvancedSearch('tag:' + tag.slice(1))
             }
             // handle: delete tag
             else {
@@ -83,22 +83,5 @@ export class TagPanel extends SidebarPanel {
     this.resultEl.append(
       ...tags.map(tag => html`<div class="typ-tag-item">${tag}<i class="fa fa-search"></i><i class="fa fa-trash-o"></i></div>`)
     )
-  }
-
-  private _searchTags(tag: string) {
-    const rawTag = tag.slice(1)
-
-    const pattern = [
-      // 1) Single-line Frontmatter: `tags: [apple, orange]`
-      `^tags:.*(?:\\b|[\\s,\\[])${rawTag}(?:\\b|[\\s,\\]]).*$`,
-
-      // 2) Multi-line Frontmatter : `tags:\n- apple`
-      `^\\s*-\\s*${rawTag}\\s*$`,
-
-      // 3) Inline tag             : `#apple`
-      `(?:^|\\s)#${rawTag}(?:[\\s.,!?;:）)】"']|$)`
-    ].join('|')
-
-    app.features.globalSearch.openGlobalSearch(pattern)
   }
 }
