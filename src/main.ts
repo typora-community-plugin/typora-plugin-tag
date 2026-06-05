@@ -1,5 +1,5 @@
 import './style.scss'
-import { debounce, I18n, Plugin, PluginSettings } from '@typora-community-plugin/core'
+import { debounce, I18n, path, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
 import { TagStyleToggler } from './features/style-toggler'
@@ -65,6 +65,12 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.register(
       this.app.metadata.on('index:update', (filePath) =>
         this._addFrontMatterTagsToStore(filePath)))
+
+    this.register(
+      this.app.workspace.on('file:open', (filePath) => {
+        const relativePath = path.relative(this.app.vault.path, filePath)
+        this._addFrontMatterTagsToStore(relativePath)
+      }))
 
     this.addChild(new TagRenderer(this))
     this.addChild(new TagStyleToggler(this))
