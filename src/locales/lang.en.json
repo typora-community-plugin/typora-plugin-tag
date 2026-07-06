@@ -1,0 +1,8 @@
+{
+  "toggleTag": "Toggle Focused/Selected Text Tag Style",
+  "ribbonTags": "Tags",
+  "useSuggest": {
+    "name": "Use suggestion",
+    "desc": "Input text prefix `#` to trigger tag suggestions."
+  }
+}

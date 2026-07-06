@@ -1,4 +1,5 @@
 import './style.scss'
+import * as Locale from './locales/lang.en.json'
 import { debounce, I18n, path, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
@@ -19,25 +20,8 @@ const DEFAULT_SETTINGS: TagSettings = {
 
 export default class TagPlugin extends Plugin<TagSettings> {
 
-  i18n = new I18n({
-    resources: {
-      'en': {
-        toggleTag: 'Toggle Focused/Selected Text Tag Style',
-        ribbonTags: 'Tags',
-        useSuggest: {
-          name: 'Use suggestion',
-          desc: 'Input text prefix `#` to trigger tag suggestions.'
-        },
-      },
-      'zh-cn': {
-        toggleTag: '切换标签样式',
-        ribbonTags: '标签',
-        useSuggest: {
-          name: '输入建议',
-          desc: '输入触发字符 `#` 触发标签建议。'
-        },
-      },
-    }
+  i18n = new I18n<typeof Locale>({
+    localePath: path.join(this.manifest.dir!, 'locales')
   })
 
   store = new TagStore()
