@@ -1,0 +1,8 @@
+{
+  "toggleTag": "Tags-Style f\u00fcr fokussierten/ausgew\u00e4hlten Text umschalten",
+  "ribbonTags": "Tags",
+  "useSuggest": {
+    "name": "Vorschlag verwenden",
+    "desc": "Textpr\u00e4fix `#` eingeben, um Tag-Vorschl\u00e4ge auszul\u00f6sen."
+  }
+}
