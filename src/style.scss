@@ -1,8 +1,9 @@
-i[alt="tag"] {
+#write .typ-tag,
+.typ-workspace-leaf .typ-tag {
   border-radius: 3px;
-  padding: 0.2em 0.4em;
-  font-size: 0.9em;
-  font-style: normal;
+  border: 0;
+  box-shadow: none;
+  padding: 0.2rem 0;
   color: #00965e;
   background-color: rgba(0, 150, 94, 0.05);
 }

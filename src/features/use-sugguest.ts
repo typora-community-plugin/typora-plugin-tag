@@ -68,7 +68,7 @@ class TagSuggest extends TextSuggest {
   }
 
   beforeApply(suggest: string) {
-    return `<i alt="tag">${suggest}</i>`
+    return suggest
   }
 }
 

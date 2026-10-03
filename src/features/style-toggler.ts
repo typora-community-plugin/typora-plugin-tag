@@ -23,28 +23,41 @@ export class TagStyleToggler extends Component {
   private toggleTagStyle() {
     if (isInputComponent(document.activeElement)) return
 
-    const selected = document.getSelection()?.anchorNode?.parentElement?.parentElement ?? null
-    if (
-      this.isTagEl(selected) ||
-      this.isTagEl(selected!.children[1])
-    ) {
-      editor.selection.selectPhrase()
-      const selectedText = document.getSelection()?.toString() ?? ''
-      const [, text] = selectedText.match(/<i alt="tag">#([^<]+)<\/i>/) ?? []
-      editor.UserOp.pasteHandler(editor, text, false)
+    const range = editor.selection.getRangy()
+    if (range.collapsed) editor.selection.selectWord()
+    this.includeLeadingHash()
+
+    const selectedText = document.getSelection()?.toString() ?? ''
+    if (this.isInTag() || selectedText.startsWith('#')) {
+      editor.UserOp.pasteHandler(editor, selectedText.replace(/^#/, ''), false)
     }
     else {
-      const range = editor.selection.getRangy()
-      if (range.collapsed) editor.selection.selectWord()
-      const selectedText = document.getSelection()?.toString() ?? ''
-      const tag = (selectedText.startsWith('#') ? '' : '#') + selectedText
-      const html = `<i alt="tag">${tag}</i>`
+      const tag = '#' + selectedText
       this.plugin.store.add(tag)
-      editor.UserOp.pasteHandler(editor, html, true)
+      editor.UserOp.pasteHandler(editor, tag, true)
     }
   }
 
-  private isTagEl(el: Element | null) {
-    return el && el.tagName === 'I' && el.getAttribute('alt') === 'tag'
+  private includeLeadingHash() {
+    const sel = document.getSelection()
+    if (!sel || sel.rangeCount === 0) return
+    const range = sel.getRangeAt(0)
+    const node = range.startContainer
+    const text = node.nodeValue
+    if (typeof text === 'string' && range.startOffset > 0 && text[range.startOffset - 1] === '#') {
+      range.setStart(node, range.startOffset - 1)
+      sel.removeAllRanges()
+      sel.addRange(range)
+    }
+  }
+
+  private isInTag() {
+    let el: Node | null = document.getSelection()?.anchorNode ?? null
+    while (el) {
+      const classList = (el as Element).classList
+      if (classList?.contains('typ-tag')) return true
+      el = el.parentNode
+    }
+    return false
   }
 }
