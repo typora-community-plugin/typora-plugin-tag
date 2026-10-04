@@ -1,6 +1,10 @@
 {
   "toggleTag": "切换标签样式",
   "ribbonTags": "标签",
+  "tagPanelShowFrontmatterTags": {
+    "name": "标签面板显示 frontmatter 中的标签",
+    "desc": "需要启用内置插件“元数据”"
+  },
   "useSuggest": {
     "name": "输入建议",
     "desc": "输入触发字符 `#` 触发标签建议。"

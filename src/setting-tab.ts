@@ -27,6 +27,11 @@ export class TagSettingTab extends SettingTab {
       })
     })
 
+    this.addSetting(setting => {
+      setting.addName(t.tagPanelShowFrontmatterTags.name)
+      setting.addDescription(t.tagPanelShowFrontmatterTags.desc)
+    })
+
     super.show()
   }
 

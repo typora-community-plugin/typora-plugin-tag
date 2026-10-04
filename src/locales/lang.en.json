@@ -1,6 +1,10 @@
 {
   "toggleTag": "Toggle Focused/Selected Text Tag Style",
   "ribbonTags": "Tags",
+  "tagPanelShowFrontmatterTags": {
+    "name": "Tag panel displays tags from frontmatter",
+    "desc": "Requires the Core Plugin \"Metadata\" plugin to be enabled"
+  },
   "useSuggest": {
     "name": "Use suggestion",
     "desc": "Input text prefix `#` to trigger tag suggestions."
