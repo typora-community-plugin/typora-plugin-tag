@@ -1,6 +1,10 @@
 {
   "toggleTag": "切换标签样式",
   "ribbonTags": "标签",
+  "tagPanelSearch": "搜索",
+  "tagPanelSearchTag": "搜索包含此标签的文档",
+  "tagPanelDeleteTag": "删除此标签",
+  "tagPanelTagDeleted": "已删除标签 {tag}",
   "tagPanelShowFrontmatterTags": {
     "name": "标签面板显示 frontmatter 中的标签",
     "desc": "需要启用内置插件“元数据”"

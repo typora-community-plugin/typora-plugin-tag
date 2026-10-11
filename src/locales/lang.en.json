@@ -1,6 +1,10 @@
 {
   "toggleTag": "Toggle Focused/Selected Text Tag Style",
   "ribbonTags": "Tags",
+  "tagPanelSearch": "Search",
+  "tagPanelSearchTag": "Search documents with this tag",
+  "tagPanelDeleteTag": "Delete this tag",
+  "tagPanelTagDeleted": "Tag {tag} deleted",
   "tagPanelShowFrontmatterTags": {
     "name": "Tag panel displays tags from frontmatter",
     "desc": "Requires the Core Plugin \"Metadata\" plugin to be enabled"

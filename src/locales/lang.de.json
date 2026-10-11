@@ -1,6 +1,10 @@
 {
   "toggleTag": "Tags-Style f\u00fcr fokussierten/ausgew\u00e4hlten Text umschalten",
   "ribbonTags": "Tags",
+  "tagPanelSearch": "Suchen",
+  "tagPanelSearchTag": "Dokumente mit diesem Tag suchen",
+  "tagPanelDeleteTag": "Diesen Tag l\u00f6schen",
+  "tagPanelTagDeleted": "Tag {tag} gel\u00f6scht",
   "tagPanelShowFrontmatterTags": {
     "name": "Tag-Panel zeigt Tags aus Frontmatter",
     "desc": "Erfordert, dass das Core Plugin \"Metadata\" aktiviert ist"
