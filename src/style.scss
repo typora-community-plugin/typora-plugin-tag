@@ -1,11 +1,14 @@
-#write .typ-tag,
-.typ-workspace-leaf .typ-tag {
-  border-radius: 3px;
-  border: 0;
-  box-shadow: none;
-  padding: 0.2rem 0;
-  color: #00965e;
-  background-color: rgba(0, 150, 94, 0.05);
+#write,
+.typ-workspace-leaf,
+.typ-workspace-floating {
+  .typ-tag {
+    border-radius: 3px;
+    border: 0;
+    box-shadow: none;
+    padding: 0.2rem 0;
+    color: #00965e;
+    background-color: rgba(0, 150, 94, 0.05);
+  }
 }
 
 #typ-tag-panel input {
