@@ -1,3 +1,6 @@
+.opencode/
+.temp/
+
 # npm
 node_modules/
 

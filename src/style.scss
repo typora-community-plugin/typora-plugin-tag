@@ -11,8 +11,17 @@
   }
 }
 
-#typ-tag-panel input {
-  width: 100%;
+#typ-tag-panel {
+  input {
+    width: 100%;
+  }
+
+  .ty-sidebar-search-panel {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--bg-color);
+  }
 }
 
 .typ-tag-item {
