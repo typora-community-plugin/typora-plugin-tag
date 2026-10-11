@@ -18,6 +18,8 @@ const DEFAULT_SETTINGS: TagSettings = {
   tags: [],
 }
 
+const RE_INLINE_TAG = /(^|\s)(#[^\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,.:;<=>?@^`{|}~\[\]\\\s]+)/g
+
 export default class TagPlugin extends Plugin<TagSettings> {
 
   i18n = new I18n<typeof Locale>({
@@ -42,18 +44,48 @@ export default class TagPlugin extends Plugin<TagSettings> {
         this.settings.set('tags', this.store.toArray()), 1e3)))
 
     this.register(
+      this.app.metadata.register('md', async (ctx) => {
+        const tags: { name: string; lineText: string; lineNumber: number }[] = []
+        let inFrontMatter = false
+        let inFence = false
+        const lines = (await ctx.text()).split(/\r\n|\r|\n/)
+        for (let index = 0; index < lines.length; index++) {
+          const line = lines[index]
+          const trimmed = line.trim()
+          if (trimmed === '---' && (index === 0 || inFrontMatter)) {
+            inFrontMatter = !inFrontMatter
+            continue
+          }
+          if (inFrontMatter) continue
+          if (/^(```|~~~)/.test(trimmed)) {
+            inFence = !inFence
+            continue
+          }
+          if (inFence) continue
+          for (const match of line.match(RE_INLINE_TAG) ?? []) {
+            tags.push({
+              name: match.trim().slice(1),
+              lineText: trimmed,
+              lineNumber: index + 1,
+            })
+          }
+        }
+        return { metadata: { tags } }
+      }, { merge: { 'metadata.tags': 'concatUnique' } }))
+
+    this.register(
       this.app.metadata.on('index:done', () => {
         Object.keys(this.app.metadata.cache).forEach(key =>
-          this._addFrontMatterTagsToStore(key))
+          this._addTagsToStore(key))
       }))
     this.register(
       this.app.metadata.on('index:update', (filePath) =>
-        this._addFrontMatterTagsToStore(filePath)))
+        this._addTagsToStore(filePath)))
 
     this.register(
       this.app.workspace.on('file:open', (filePath) => {
         const relativePath = path.relative(this.app.vault.path, filePath)
-        this._addFrontMatterTagsToStore(relativePath)
+        this._addTagsToStore(relativePath)
       }))
 
     this.addChild(new TagRenderer(this))
@@ -63,9 +95,11 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.registerSettingTab(new TagSettingTab(this))
   }
 
-  private _addFrontMatterTagsToStore(filePath: string) {
+  private _addTagsToStore(filePath: string) {
     const { cache } = this.app.metadata
-    let tags = cache[filePath]?.metadata?.frontmatter?.tags as string | string[]
-    if (Array.isArray(tags)) this.store.bulkAdd(tags.map(t => '#' + t))
+    const tags = cache[filePath]?.metadata?.tags
+    if (Array.isArray(tags)) {
+      this.store.bulkAdd(tags.map(t => '#' + t.name.replace(/^#+/, '')))
+    }
   }
 }
