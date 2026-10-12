@@ -24,6 +24,18 @@
   }
 }
 
+.typ-tag-list {
+  position: relative;
+}
+
+.typ-tag-list-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
 .typ-tag-item {
   position: relative;
   padding: .3rem .6rem;

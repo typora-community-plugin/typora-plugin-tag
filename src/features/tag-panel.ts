@@ -3,10 +3,24 @@ import type TagPlugin from '../main'
 import type { UseSuggest } from './use-sugguest'
 
 
+const OVERSCAN = 8
+const FALLBACK_ROW_HEIGHT = 28
+
 export class TagPanel extends SidebarPanel {
 
   inputEl: HTMLInputElement
   resultEl: HTMLElement
+
+  private listEl: HTMLElement
+  private bodyEl: HTMLElement
+  private tags: string[] = []
+  private rowHeight = 0
+  private visibleStart = -1
+  private visibleEnd = -1
+  private scrollEl: HTMLElement | null = null
+  private boundScrollEl: HTMLElement | null = null
+  private scrolling = false
+  private lastQuery: string | null = null
 
   constructor(private plugin: TagPlugin, useSuggest: UseSuggest) {
     super()
@@ -24,6 +38,11 @@ export class TagPanel extends SidebarPanel {
     useSuggest.register(
       plugin.store.on('tag:change', this.debouncedRenderQueriedTags))
 
+    this.bodyEl = $('<div class="typ-tag-list-body"></div>').get(0) as HTMLElement
+    this.listEl = $('<div class="typ-tag-list"></div>')
+      .append(this.bodyEl)
+      .get(0) as HTMLElement
+
     this.containerEl = $(`<div id="typ-tag-panel"></div>`)
       .append(
 
@@ -38,28 +57,131 @@ export class TagPanel extends SidebarPanel {
         this.resultEl =
         $('<div class="typ-tag-results"></div>')
           .on('click', event => this._onResultClick(event))
+          .append(this.listEl)
           .get(0)
       )
       .get(0)
   }
 
   onshow() {
+    this._bindScroll()
     this.renderQueriedTags()
   }
 
   renderQueriedTags() {
     const query = this.inputEl.value.trim()
-    const tags = this.plugin.store
+    this.tags = this.plugin.store
       .toArray()
       .filter(tag => tag.includes(query))
       .sort()
 
-    this.resultEl.innerHTML = ''
-    this.resultEl.append(...tags.map(tag => this._createTagItem(tag)))
+    this.visibleStart = this.visibleEnd = -1
+
+    if (query !== this.lastQuery) {
+      this.lastQuery = query
+      const scrollEl = this._getScrollEl()
+      if (scrollEl) scrollEl.scrollTop = 0
+    }
+
+    this._updateVisible(true)
   }
 
   debouncedRenderQueriedTags =
     debounce(() => this.renderQueriedTags(), 500)
+
+  private _updateVisible(force = false) {
+    const count = this.tags.length
+
+    if (count === 0) {
+      this.bodyEl.textContent = ''
+      this.bodyEl.style.transform = ''
+      this.listEl.style.height = '0px'
+      this.visibleStart = this.visibleEnd = 0
+      return
+    }
+
+    if (this.rowHeight === 0)
+      this._measureRowHeight()
+
+    const rowHeight = this.rowHeight || FALLBACK_ROW_HEIGHT
+    const scrollEl = this._getScrollEl()
+    const viewportHeight = scrollEl?.clientHeight || window.innerHeight
+    const scrollTop = this._getScrollOffset()
+
+    const start = Math.max(0, Math.min(
+      count - 1,
+      Math.floor(scrollTop / rowHeight) - OVERSCAN))
+    const end = Math.min(
+      count,
+      Math.ceil((scrollTop + viewportHeight) / rowHeight) + OVERSCAN)
+
+    this.listEl.style.height = `${count * rowHeight}px`
+
+    if (!force && start === this.visibleStart && end === this.visibleEnd)
+      return
+
+    this.visibleStart = start
+    this.visibleEnd = end
+
+    this.bodyEl.textContent = ''
+    this.bodyEl.append(...this.tags.slice(start, end).map(tag => this._createTagItem(tag)))
+    this.bodyEl.style.transform = `translateY(${start * rowHeight}px)`
+  }
+
+  private _measureRowHeight() {
+    const probe = this._createTagItem(this.tags[0])
+    this.bodyEl.append(probe)
+
+    const height = probe.offsetHeight
+    probe.remove()
+
+    if (height > 0)
+      this.rowHeight = height
+  }
+
+  private _getScrollEl(): HTMLElement | null {
+    if (this.scrollEl?.isConnected)
+      return this.scrollEl
+
+    let el = this.resultEl?.parentElement ?? null
+    while (el) {
+      const overflowY = getComputedStyle(el).overflowY
+      if (overflowY === 'auto' || overflowY === 'scroll')
+        break
+      el = el.parentElement
+    }
+
+    this.scrollEl = el ?? document.documentElement
+    return this.scrollEl
+  }
+
+  private _getScrollOffset() {
+    const scrollEl = this._getScrollEl()
+    if (!scrollEl) return 0
+
+    const containerTop = scrollEl.getBoundingClientRect().top
+    const listTop = this.listEl.getBoundingClientRect().top
+    return Math.max(0, containerTop - listTop)
+  }
+
+  private _bindScroll() {
+    const scrollEl = this._getScrollEl()
+    if (!scrollEl || scrollEl === this.boundScrollEl) return
+
+    this.boundScrollEl?.removeEventListener('scroll', this._onScroll)
+    scrollEl.addEventListener('scroll', this._onScroll, { passive: true })
+    this.boundScrollEl = scrollEl
+  }
+
+  private _onScroll = () => {
+    if (this.scrolling) return
+
+    this.scrolling = true
+    requestAnimationFrame(() => {
+      this.scrolling = false
+      this._updateVisible()
+    })
+  }
 
   private _createTagItem(tag: string) {
     const { t } = this.plugin.i18n
