@@ -13,6 +13,7 @@ export class TagPanel extends SidebarPanel {
 
   private listEl: HTMLElement
   private bodyEl: HTMLElement
+  private noticeEl: HTMLElement
   private tags: string[] = []
   private rowHeight = 0
   private visibleStart = -1
@@ -38,10 +39,16 @@ export class TagPanel extends SidebarPanel {
     useSuggest.register(
       plugin.store.on('tag:change', this.debouncedRenderQueriedTags))
 
+    useSuggest.register(
+      app.settings.addChangeListener(
+        ['internalPlugin.enabledPlugins', 'internal.metadata'],
+        () => this.renderQueriedTags()))
+
     this.bodyEl = $('<div class="typ-tag-list-body"></div>').get(0) as HTMLElement
     this.listEl = $('<div class="typ-tag-list"></div>')
       .append(this.bodyEl)
       .get(0) as HTMLElement
+    this.noticeEl = $('<div class="typ-tag-notice"></div>').get(0) as HTMLElement
 
     this.containerEl = $(`<div id="typ-tag-panel"></div>`)
       .append(
@@ -57,7 +64,7 @@ export class TagPanel extends SidebarPanel {
         this.resultEl =
         $('<div class="typ-tag-results"></div>')
           .on('click', event => this._onResultClick(event))
-          .append(this.listEl)
+          .append(this.noticeEl, this.listEl)
           .get(0)
       )
       .get(0)
@@ -69,11 +76,20 @@ export class TagPanel extends SidebarPanel {
   }
 
   renderQueriedTags() {
+    const enabled = this.plugin.metadataEnabled
+    this.noticeEl.textContent = enabled
+      ? ''
+      : this.plugin.i18n.t.tagPanelMetadataRequired
+    this.noticeEl.style.display = enabled ? 'none' : ''
+    this.inputEl.disabled = !enabled
+
     const query = this.inputEl.value.trim()
-    this.tags = this.plugin.store
-      .toArray()
-      .filter(tag => tag.includes(query))
-      .sort()
+    this.tags = enabled
+      ? this.plugin.store
+        .toArray()
+        .filter(tag => tag.includes(query))
+        .sort()
+      : []
 
     this.visibleStart = this.visibleEnd = -1
 

@@ -5,6 +5,7 @@
   "tagPanelSearchTag": "Search documents with this tag",
   "tagPanelDeleteTag": "Delete this tag",
   "tagPanelTagDeleted": "Tag {tag} deleted",
+  "tagPanelMetadataRequired": "Feature limited: need to enable the Core plugin \"Metadata\".",
   "tagPanelShowFrontmatterTags": {
     "name": "Tag panel displays tags from frontmatter",
     "desc": "Requires the Core Plugin \"Metadata\" plugin to be enabled"

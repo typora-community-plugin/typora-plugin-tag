@@ -39,6 +39,11 @@ export default class TagPlugin extends Plugin<TagSettings> {
 
   store = new TagStore()
 
+  get metadataEnabled() {
+    return !!this.app.settings.get(
+      ['internalPlugin.enabledPlugins', 'internal.metadata'])
+  }
+
   onload() {
 
     this.registerSettings(
@@ -98,7 +103,8 @@ export default class TagPlugin extends Plugin<TagSettings> {
     // The internal metadata plugin is disabled by default, so nothing triggers
     // `metadata.index()`. Kick it off ourselves (after registering the provider)
     // so the cache is built with our provider included.
-    this.app.metadata.index().catch(() => { })
+    if (this.metadataEnabled)
+      this.app.metadata.index().catch(() => { })
 
     this.addChild(new TagRenderer(this))
     this.addChild(new TagStyleToggler(this))
