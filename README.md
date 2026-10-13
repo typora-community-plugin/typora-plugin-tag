@@ -9,8 +9,9 @@ A [Typora](https://typora.io) plugin developed based on [typora-community-plugin
 
 - **Tag Toggle** — Use keyboard shortcuts to quickly convert text into styled tags
 - **Input Suggestions** — Automatically show autocomplete suggestions for existing tags when typing `#`
-- **Tag Panel** — Sidebar tag management panel with search and delete support
-  - **Frontmatter Compatible** — Automatically recognizes the tags field in YAML Frontmatter based on the built-in Metadata plugin
+- **Tag Panel** — Sidebar tag management panel with tag counts, search and delete support
+  - **Tag Counts** — Each tag shows its occurrence count across all documents on the right
+  - **Metadata Integration** — Automatically recognizes the tags field in YAML Frontmatter and `#tag` in the body text based on the built-in Metadata plugin; shows a notice and disables search when the plugin is disabled
 - **Multi-language Support** — Simplified Chinese, English, German
 
 ## Preview
@@ -32,9 +33,12 @@ A [Typora](https://typora.io) plugin developed based on [typora-community-plugin
 
 Click the **Tag Icon** (🏷) in the sidebar to open the tag management panel:
 
-- **Search Tags** — The input box supports real-time filtering of tags
+- **Search Tags** — The input box supports real-time filtering of tags (sticky while scrolling)
+- **Tag Counts** — Each tag shows its occurrence count on the right
 - **Search Documents** — Hover over a tag and click the left 🔍 icon to search for all documents containing that tag
 - **Delete Tag** — Hover over a tag and click the right 🗑 icon to remove the tag
+
+> The tag panel depends on the built-in **Metadata** plugin. If it is disabled, the panel shows a notice and disables search and the list.
 
 ### Input Suggestions
 
