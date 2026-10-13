@@ -71,16 +71,23 @@ export default class TagPlugin extends Plugin<TagSettings> {
           }
         }
         return { metadata: { tags } }
-      }, { merge: { 'metadata.tags': 'concatUnique' } }))
+      }, { merge: { 'metadata.tags': 'concat' } }))
 
     this.register(
       this.app.metadata.on('index:done', () => this._rebuildTagStore()))
 
     this.register(
-      this.app.metadata.on('index:update', () => this._rebuildTagStore()))
+      this.app.metadata.on('index:update', (relativePath) =>
+        this.store.setFileTags(
+          relativePath, this._tagNames(this.app.metadata.cache[relativePath]))))
 
     this.register(
-      this.app.workspace.on('file:open', () => this._rebuildTagStore()))
+      this.app.workspace.on('file:open', (filePath) =>
+        this._updateFileTags(filePath)))
+
+    this.register(
+      this.app.metadata.on('index:remove', (relativePath) =>
+        this.store.removeFiles(relativePath)))
 
     // The internal metadata plugin is disabled by default, so nothing triggers
     // `metadata.index()`. Kick it off ourselves (after registering the provider)
@@ -94,22 +101,33 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.registerSettingTab(new TagSettingTab(this))
   }
 
+  /** Tag names in one file, one entry per occurrence (duplicates kept). */
+  private _tagNames(entry: { metadata?: { tags?: unknown } } | undefined): string[] {
+    const tags = entry?.metadata?.tags
+    if (!Array.isArray(tags)) return []
+
+    const names: string[] = []
+    for (const tag of tags) {
+      const name = '#' + String((tag as any)?.name ?? '').replace(/^#+/, '')
+      if (name !== '#') names.push(name)
+    }
+    return names
+  }
+
+  private _updateFileTags(filePath: string) {
+    const relativePath = path.relative(this.app.vault.path, filePath)
+    this.store.setFileTags(
+      relativePath,
+      this._tagNames(this.app.metadata.cache[relativePath]))
+  }
+
   private _rebuildTagStore() {
-    const counts: Record<string, number> = {}
+    const files: Record<string, string[]> = {}
 
-    for (const entry of Object.values(this.app.metadata.cache)) {
-      const tags = entry?.metadata?.tags
-      if (!Array.isArray(tags)) continue
-
-      const seen = new Set<string>()
-      for (const tag of tags) {
-        const name = '#' + String(tag?.name ?? '').replace(/^#+/, '')
-        if (name === '#' || seen.has(name)) continue
-        seen.add(name)
-        counts[name] = (counts[name] ?? 0) + 1
-      }
+    for (const [relativePath, entry] of Object.entries(this.app.metadata.cache)) {
+      files[relativePath] = this._tagNames(entry)
     }
 
-    this.store.setCounts(counts)
+    this.store.setFiles(files)
   }
 }
