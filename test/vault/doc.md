@@ -1,10 +1,3 @@
----
-tags: [frontmatter, markdown]
-note: tag1
-notes:
-- tag2
----
-
 # Doc
 
 #tag
