@@ -1,6 +1,6 @@
 import './style.scss'
 import * as Locale from './locales/lang.en.json'
-import { debounce, I18n, path, Plugin, PluginSettings } from '@typora-community-plugin/core'
+import { I18n, path, Plugin, PluginSettings } from '@typora-community-plugin/core'
 import { TagStore } from './store'
 import { TagRenderer } from './features/tag-renderer'
 import { TagStyleToggler } from './features/style-toggler'
@@ -10,12 +10,23 @@ import { TagSettingTab } from './setting-tab'
 
 interface TagSettings {
   useSuggest: boolean
-  tags: string[]
 }
 
 const DEFAULT_SETTINGS: TagSettings = {
   useSuggest: false,
-  tags: [],
+}
+
+const migrations = {
+  hasMigrated: false,
+  migrate(settings: any) {
+    if (settings.version < 2) {
+      settings.migrateTo(2, ({ settings: data }: any) => {
+        delete data.tags
+        return { version: 2, settings: data }
+      })
+      this.hasMigrated = true
+    }
+  },
 }
 
 const RE_INLINE_TAG = /(^|\s)(#[^\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,.:;<=>?@^`{|}~\[\]\\\s]+)/g
@@ -32,16 +43,11 @@ export default class TagPlugin extends Plugin<TagSettings> {
 
     this.registerSettings(
       new PluginSettings(this.app, this.manifest, {
-        version: 1,
+        version: 2,
+        migrations: migrations as any,
       }))
 
     this.settings.setDefault(DEFAULT_SETTINGS)
-
-    this.store.bulkAdd(this.settings.get('tags'))
-
-    this.register(
-      this.store.on('tag:change', debounce(() =>
-        this.settings.set('tags', this.store.toArray()), 1e3)))
 
     this.register(
       this.app.metadata.register('md', async (ctx) => {

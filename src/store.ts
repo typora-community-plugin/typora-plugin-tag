@@ -30,14 +30,6 @@ export class TagStore extends Events<TagEvents> {
     return this
   }
 
-  bulkAdd(values: string[]): this {
-    for (const value of values) {
-      if (!this._counts.has(value)) this._counts.set(value, 0)
-    }
-    this.emit('tag:change')
-    return this
-  }
-
   delete(value: string): this {
     this._counts.delete(value)
     this.emit('tag:change')
