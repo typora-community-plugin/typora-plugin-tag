@@ -45,8 +45,8 @@ importers:
         specifier: npm:@typora-community-plugin/typora-types@^1.0.3
         version: '@typora-community-plugin/typora-types@1.0.16'
       '@typora-community-plugin/core':
-        specifier: ^2.10.61
-        version: 2.10.61
+        specifier: ^2.10.64
+        version: 2.10.64
       archiver:
         specifier: ^5.3.2
         version: 5.3.2
@@ -1056,8 +1056,8 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
-  '@typora-community-plugin/core@2.10.61':
-    resolution: {integrity: sha512-73NYVVWPyIZZ7hYF9ZK3dCpK8znM2dQzdRaWXT9HUXIA3Acp8O0yY5UWTbuUXdn3Ugm/eDIubPzro1p1jdrVXw==}
+  '@typora-community-plugin/core@2.10.64':
+    resolution: {integrity: sha512-IBCKJsRRFsPTgCVa+0REm2Qyyc5hzFszdPWirE4Zk0YnVGFk9Xh0xdMVOcROXRC0k1YEN0tmtEZ18V09DwrKrw==}
 
   '@typora-community-plugin/esbuild-plugin-typora@1.0.12':
     resolution: {integrity: sha512-iOEM8e0Y7/83dqVHm2HX9XglL0BD0t4NTbH4PKtea7ohrOxI/frkWb4nHW4iMoxp5mVBdCf5QUpcm3H6DeIfdQ==}
@@ -1247,12 +1247,12 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+    deprecated: Glob versions prior to v9 are no longer supported
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
@@ -2493,7 +2493,7 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
-  '@typora-community-plugin/core@2.10.61':
+  '@typora-community-plugin/core@2.10.64':
     dependencies:
       '@plylrnsdy/decorate.js': 1.0.4
 

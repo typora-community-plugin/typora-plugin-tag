@@ -8,6 +8,7 @@ type TagEvents = {
 export class TagStore extends Events<TagEvents> {
 
   private _store: Record<string, boolean> = {}
+  private _counts: Record<string, number> = {}
 
   constructor() {
     super('TagStore')
@@ -15,6 +16,10 @@ export class TagStore extends Events<TagEvents> {
 
   has(value: string) {
     return this._store[value]
+  }
+
+  count(value: string) {
+    return this._counts[value] ?? 0
   }
 
   add(value: string): this {
@@ -31,6 +36,15 @@ export class TagStore extends Events<TagEvents> {
 
   delete(value: string) {
     delete this._store[value]
+    delete this._counts[value]
+    this.emit('tag:change')
+    return this
+  }
+
+  setCounts(counts: Record<string, number>) {
+    this._counts = { ...counts }
+    this._store = {}
+    Object.keys(counts).forEach(tag => this._store[tag] = true)
     this.emit('tag:change')
     return this
   }

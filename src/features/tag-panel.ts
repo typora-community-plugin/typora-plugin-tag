@@ -185,7 +185,8 @@ export class TagPanel extends SidebarPanel {
 
   private _createTagItem(tag: string) {
     const { t } = this.plugin.i18n
-    return html`<div class="typ-tag-item" data-tag="${tag}">${tag}<i class="fa fa-search" data-action="search" title="${t.tagPanelSearchTag}" aria-label="${t.tagPanelSearchTag}"></i><i class="fa fa-trash-o" data-action="delete" title="${t.tagPanelDeleteTag}" aria-label="${t.tagPanelDeleteTag}"></i></div>`
+    const count = this.plugin.store.count(tag)
+    return html`<div class="typ-tag-item" data-tag="${tag}"><span class="typ-tag-name">${tag}</span><span class="typ-tag-count">${count}</span><i class="fa fa-search" data-action="search" title="${t.tagPanelSearchTag}" aria-label="${t.tagPanelSearchTag}"></i><i class="fa fa-trash-o" data-action="delete" title="${t.tagPanelDeleteTag}" aria-label="${t.tagPanelDeleteTag}"></i></div>`
   }
 
   private _onResultClick(event: JQuery.Event<HTMLElement>) {

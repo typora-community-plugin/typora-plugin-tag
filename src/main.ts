@@ -74,19 +74,18 @@ export default class TagPlugin extends Plugin<TagSettings> {
       }, { merge: { 'metadata.tags': 'concatUnique' } }))
 
     this.register(
-      this.app.metadata.on('index:done', () => {
-        Object.keys(this.app.metadata.cache).forEach(key =>
-          this._addTagsToStore(key))
-      }))
-    this.register(
-      this.app.metadata.on('index:update', (filePath) =>
-        this._addTagsToStore(filePath)))
+      this.app.metadata.on('index:done', () => this._rebuildTagStore()))
 
     this.register(
-      this.app.workspace.on('file:open', (filePath) => {
-        const relativePath = path.relative(this.app.vault.path, filePath)
-        this._addTagsToStore(relativePath)
-      }))
+      this.app.metadata.on('index:update', () => this._rebuildTagStore()))
+
+    this.register(
+      this.app.workspace.on('file:open', () => this._rebuildTagStore()))
+
+    // The internal metadata plugin is disabled by default, so nothing triggers
+    // `metadata.index()`. Kick it off ourselves (after registering the provider)
+    // so the cache is built with our provider included.
+    this.app.metadata.index().catch(() => { })
 
     this.addChild(new TagRenderer(this))
     this.addChild(new TagStyleToggler(this))
@@ -95,11 +94,22 @@ export default class TagPlugin extends Plugin<TagSettings> {
     this.registerSettingTab(new TagSettingTab(this))
   }
 
-  private _addTagsToStore(filePath: string) {
-    const { cache } = this.app.metadata
-    const tags = cache[filePath]?.metadata?.tags
-    if (Array.isArray(tags)) {
-      this.store.bulkAdd(tags.map(t => '#' + t.name.replace(/^#+/, '')))
+  private _rebuildTagStore() {
+    const counts: Record<string, number> = {}
+
+    for (const entry of Object.values(this.app.metadata.cache)) {
+      const tags = entry?.metadata?.tags
+      if (!Array.isArray(tags)) continue
+
+      const seen = new Set<string>()
+      for (const tag of tags) {
+        const name = '#' + String(tag?.name ?? '').replace(/^#+/, '')
+        if (name === '#' || seen.has(name)) continue
+        seen.add(name)
+        counts[name] = (counts[name] ?? 0) + 1
+      }
     }
+
+    this.store.setCounts(counts)
   }
 }

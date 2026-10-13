@@ -41,13 +41,36 @@
   padding: .3rem .6rem;
   font-size: .875rem;
 
+  .typ-tag-name {
+    display: block;
+    padding-right: 3.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .typ-tag-count {
+    position: absolute;
+    top: .3rem;
+    right: .6rem;
+    font-size: .75rem;
+    opacity: .5;
+  }
+
   &:hover {
     background: rgba(var(--typ-color-gray-1), .5);
+
+    .typ-tag-count {
+      display: none;
+    }
   }
 
   i.fa {
     display: none;
     position: absolute;
+    top: 0;
+    height: 100%;
+    align-items: center;
 
     &.fa-search {
       right: 2rem;
@@ -59,6 +82,6 @@
   }
 
   &:hover i.fa {
-    display: inline;
+    display: inline-flex;
   }
 }
