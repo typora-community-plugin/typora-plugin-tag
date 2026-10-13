@@ -12,15 +12,26 @@
 }
 
 #typ-tag-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+
   input {
     width: 100%;
   }
 
   .ty-sidebar-search-panel {
-    position: sticky;
-    top: 0;
+    flex: 0 0 auto;
     z-index: 1;
     background-color: var(--bg-color);
+  }
+
+  .typ-tag-results {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 

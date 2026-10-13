@@ -18,7 +18,6 @@ export class TagPanel extends SidebarPanel {
   private rowHeight = 0
   private visibleStart = -1
   private visibleEnd = -1
-  private scrollEl: HTMLElement | null = null
   private boundScrollEl: HTMLElement | null = null
   private scrolling = false
   private lastQuery: string | null = null
@@ -156,28 +155,11 @@ export class TagPanel extends SidebarPanel {
   }
 
   private _getScrollEl(): HTMLElement | null {
-    if (this.scrollEl?.isConnected)
-      return this.scrollEl
-
-    let el = this.resultEl?.parentElement ?? null
-    while (el) {
-      const overflowY = getComputedStyle(el).overflowY
-      if (overflowY === 'auto' || overflowY === 'scroll')
-        break
-      el = el.parentElement
-    }
-
-    this.scrollEl = el ?? document.documentElement
-    return this.scrollEl
+    return this.resultEl ?? null
   }
 
   private _getScrollOffset() {
-    const scrollEl = this._getScrollEl()
-    if (!scrollEl) return 0
-
-    const containerTop = scrollEl.getBoundingClientRect().top
-    const listTop = this.listEl.getBoundingClientRect().top
-    return Math.max(0, containerTop - listTop)
+    return this._getScrollEl()?.scrollTop ?? 0
   }
 
   private _bindScroll() {
