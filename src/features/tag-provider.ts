@@ -6,13 +6,16 @@ type MetadataProviderContext = Parameters<MetadataProvider>[0]
 
 const RE_INLINE_TAG = /(^|\s)(#[^\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,.:;<=>?@^`{|}~\[\]\\\s]+)/g
 
+const RE_INLINE_CODE = /`+[^`]*`+/g
+
 const RE_HTML_COMMENT = /<!--[\s\S]*?-->/g
 const RE_HTML_PAIR = /<([a-zA-Z][\w-]*)(?:\s[^>]*?)?>[\s\S]*?<\/\1\s*>/g
 const RE_HTML_TAG = /<\/?[a-zA-Z][^>]*>/g
 
-/** Remove inline HTML (paired elements, standalone tags and comments) so tags inside them are not parsed. */
-function stripInlineHtml(line: string): string {
+/** Remove inline code spans and inline HTML (paired elements, standalone tags and comments) so tags inside them are not parsed. */
+function stripNonContent(line: string): string {
   return line
+    .replace(RE_INLINE_CODE, '')
     .replace(RE_HTML_COMMENT, '')
     .replace(RE_HTML_PAIR, '')
     .replace(RE_HTML_TAG, '')
@@ -68,7 +71,7 @@ export async function tagProvider(ctx: MetadataProviderContext) {
       inHtmlBlock = true
       continue
     }
-    for (const match of stripInlineHtml(line).match(RE_INLINE_TAG) ?? []) {
+    for (const match of stripNonContent(line).match(RE_INLINE_TAG) ?? []) {
       tags.push({
         name: match.trim().slice(1),
         lineText: trimmed,
