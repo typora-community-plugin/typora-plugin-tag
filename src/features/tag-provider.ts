@@ -12,6 +12,8 @@ const RE_HTML_COMMENT = /<!--[\s\S]*?-->/g
 const RE_HTML_PAIR = /<([a-zA-Z][\w-]*)(?:\s[^>]*?)?>[\s\S]*?<\/\1\s*>/g
 const RE_HTML_TAG = /<\/?[a-zA-Z][^>]*>/g
 
+const RE_CONTAINER_PREFIX = /^\s*(?:>\s?|[-*+]\s+|\d+[.)]\s+)+/
+
 /** Remove inline code spans and inline HTML (paired elements, standalone tags and comments) so tags inside them are not parsed. */
 function stripNonContent(line: string): string {
   return line
@@ -19,6 +21,11 @@ function stripNonContent(line: string): string {
     .replace(RE_HTML_COMMENT, '')
     .replace(RE_HTML_PAIR, '')
     .replace(RE_HTML_TAG, '')
+}
+
+/** Strip leading blockquote/list container markers to get the block's leaf content. */
+function blockContent(line: string): string {
+  return line.replace(RE_CONTAINER_PREFIX, '')
 }
 
 export async function tagProvider(ctx: MetadataProviderContext) {
@@ -32,12 +39,13 @@ export async function tagProvider(ctx: MetadataProviderContext) {
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index]
     const trimmed = line.trim()
-    if (trimmed === '---' && (index === 0 || inFrontMatter)) {
+    const content = blockContent(line).trim()
+    if (content === '---' && (index === 0 || inFrontMatter)) {
       inFrontMatter = !inFrontMatter
       continue
     }
     if (inFrontMatter) continue
-    if (/^(```|~~~)/.test(trimmed)) {
+    if (/^(```|~~~)/.test(content)) {
       inFence = !inFence
       continue
     }
@@ -49,17 +57,17 @@ export async function tagProvider(ctx: MetadataProviderContext) {
         if (new RegExp('</' + htmlRawTag + '\\s*>', 'i').test(line)) {
           inHtmlBlock = false; htmlRawTag = ''
         }
-      } else if (trimmed === '') {
+      } else if (content === '') {
         inHtmlBlock = false
       }
       continue
     }
-    if (trimmed.startsWith('<!--')) {
+    if (content.startsWith('<!--')) {
       inHtmlBlock = true
-      inHtmlComment = !trimmed.includes('-->')
+      inHtmlComment = !content.includes('-->')
       continue
     }
-    const raw = /^<(script|pre|style|textarea)(\s|\/?>|$)/i.exec(trimmed)
+    const raw = /^<(script|pre|style|textarea)(\s|\/?>|$)/i.exec(content)
     if (raw) {
       if (!new RegExp('</' + raw[1] + '\\s*>', 'i').test(line)) {
         inHtmlBlock = true
@@ -67,7 +75,7 @@ export async function tagProvider(ctx: MetadataProviderContext) {
       }
       continue
     }
-    if (/^<\/?[a-z][\w-]*(\s|\/?>|$)/i.test(trimmed)) {
+    if (/^<\/?[a-z][\w-]*(\s|\/?>|$)/i.test(content)) {
       inHtmlBlock = true
       continue
     }
