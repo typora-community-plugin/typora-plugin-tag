@@ -7,6 +7,6 @@
   "repo": "typora-community-plugin/typora-plugin-tag",
   "version": "1.8.5",
   "minAppVersion": "1.5.0",
-  "minCoreVersion": "2.10.64",
+  "minCoreVersion": "2.10.67",
   "platforms": ["win32", "linux", "darwin"]
 }
